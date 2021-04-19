@@ -4,12 +4,14 @@
 #include<stdlib.h>
 #include"def.h"
 #include"tri.h"
-#define NL 40000 //Nombre de lignes maximum du fichier à chargé (excepté la première) <---
+#define NL 50000 //Nombre de lignes maximum du fichier à chargé (excepté la première) <---
+#define TT 30000 //Temps en miliseconde maximal pour le tri d'un tableau
 
 #define fonTRI triInsertion //Indiquer la fonction de tri à utiliser pour trier le tableau <---
 #define STR_VALUE(arg) #arg 
 #define HELLO(name) STR_VALUE(name) 
 #define strTRI HELLO(fonTRI)
+
 
 donnees tabD[NL];
 donnees tabDCopie[NL];
@@ -21,7 +23,7 @@ void afficheTab(){
 	}
 }
 
-void copieTab(donnees* tabDcopie,donnees* tabD){
+void copieTab(donnees tabDcopie[NL],donnees tabD[NL]){
 	int i, j;
 	for (i=0; i<NL; i++){
 		for (j=0; j<50; j++){  
@@ -61,7 +63,6 @@ int main(){
 			duree=1000*(fin-debut)/CLOCKS_PER_SEC;
 			fprintf(temps,"%d,%d\n",i+1,duree);
 		}
-		free(ligneCopie);
 	}
 	fclose(france);
 	fclose(temps);
@@ -69,15 +70,17 @@ int main(){
 	//tri du tableau chargé
 	i=0;
 	duree=0;
+	temps=fopen("./temps"strTRI".csv","w");
+	while(duree<TT&&i<=NL){
 		copieTab(tabDCopie,tabD);
-		temps=fopen("./temps"strTRI".csv","w");
 		debut=clock();
-		fonTRI(i,tabD);
+		fonTRI(i,tabDCopie);
 		fin=clock();
 		duree=1000*(fin-debut)/CLOCKS_PER_SEC;
 		fprintf(temps,"%d,%d\n",i,duree);
-		fclose(temps);
 		i=i+10000;
+	}
+	fclose(temps);
 	return 0;
 }
 
