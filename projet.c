@@ -9,7 +9,7 @@
 #define fonTRI triInsertion //Indiquer la fonction de tri à utiliser pour trier le tableau <---
 #define STR_VALUE(arg) #arg 
 #define HELLO(name) STR_VALUE(name) 
-#define strTRI HELLO(fTRI)
+#define strTRI HELLO(fonTRI)
 
 donnees tabD[NL];
 donnees tabDCopie[NL];
