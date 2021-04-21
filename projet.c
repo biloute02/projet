@@ -32,7 +32,7 @@ void afficheTab(){
 }
 
 //permet de faire une copie du tableau pour le tri
-void copieTab(donnees tabDcopie[NL],donnees tabD[NL]){
+void copieTab(donnees tabDCopie[NL],donnees tabD[NL]){
 	int i, j;
 	for (i=0; i<NL; i++){
 		for (j=0; j<50; j++){  
