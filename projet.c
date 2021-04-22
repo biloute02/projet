@@ -2,51 +2,26 @@
 #include<string.h>
 #include<time.h>
 #include<stdlib.h>
-#include"def.h"
-#include"tri.h"
-#define NL 50000 //Nombre de lignes maximum du fichier à chargé (excepté la première) <---
-#define TT 30 //Temps en seconde maximal pour le tri d'un tableau
+#include"def.h" 
+#include"outils.h"
+#define NL 500000 //Nombre de lignes maximum du fichier à chargé (excepté la première) <---
 
-#define fonTRI triInsertion //Indiquer la fonction de tri à utiliser pour trier le tableau <---
+#define TRI 1 // 1 : étudier une fonction de trie, 0 : sinon
+#define fonTRI triRapide //Indiquer la fonction de tri dont on veut étudier la complexité (triSelection,triInsertion,triRapide,triFusion) <---
+#define TT 30 //Temps en seconde maximal pour le tri d'un tableau <---
 #define STR_VALUE(arg) #arg 
 #define HELLO(name) STR_VALUE(name) 
 #define strTRI HELLO(fonTRI)
+#include"tri.h"//Fonctions de tri 
+
+#define RECHERCHE 1 // 1 : activer la recherche d'éléments dans le tableau, 0 : sinon
+#include"recherche.h"//Fonctions de recherche d'élément 
 
 donnees tabD[NL];
 donnees tabDCopie[NL];
 
-char *strsep (char **stringp, const char *delim){
-      	char *begin, *end;  
-	begin = *stringp;  
-	if (begin == NULL) return NULL;  
-	end = begin + strcspn (begin, delim);  
-	if (*end) {  *end++ = '\0';  *stringp = end;  }  
-	else *stringp = NULL;  return begin; 
-}
-
-void afficheTab(){
-	int i;
-	for (i=0; i<NL; i++){
-		printf("%s,%s,%s,%s\n", tabD[i].numero, tabD[i].rue, tabD[i].ville, tabD[i].code_postal);
-	}
-}
-
-//permet de faire une copie du tableau pour le tri
-void copieTab(donnees tabDCopie[NL],donnees tabD[NL]){
-	int i, j;
-	for (i=0; i<NL; i++){
-		for (j=0; j<50; j++){  
-			tabDCopie[i].numero[j]=tabD[i].numero[j];
-			tabDCopie[i].rue[j]=tabD[i].rue[j];
-			tabDCopie[i].ville[j]=tabD[i].ville[j];
-			tabDCopie[i].code_postal[j]=tabD[i].code_postal[j];
-		}
-	}
-	printf("Copié!\n");
-}
-
 int main(){	
-	int i, j;
+	int i, j, maxi;
 	char ligne[200];
 	char* ligneCopie;//copie de ligne
 	char* token;
@@ -55,8 +30,8 @@ int main(){
 	clock_t debut=clock(), fin; int duree; //Mesure des temps de chargement
 
 	//chargement du tableau
+	printf("Chargement tableau\n");
 	fgets(ligne, 200, france);
-	printf("NUMBER,STREET,CITY,POSTCODE\n");
 	for (i=0; i<NL; i++){
 		if (fgets(ligne, 200, france)==NULL) break; 
 		ligneCopie=strdup(ligne);
@@ -73,25 +48,38 @@ int main(){
 			fprintf(temps,"%d,%d\n",i+1,duree);
 		}
 	}
+	maxi=i
 	fclose(france);
 	fclose(temps);
-	
+
 	//tri du tableau chargé
-	i=0;
-	duree=0;
-	temps=fopen("./temps"strTRI".csv","w");
-	while(duree<TT*1000&&i<=NL){
-		copieTab(tabDCopie,tabD);
-		debut=clock();
-		fonTRI(i,tabDCopie);
-		fin=clock();
-		duree=1000*(fin-debut)/CLOCKS_PER_SEC;
-		fprintf(temps,"%d,%d\n",i,duree);
-		i=i+10000;
+	if (TRI){
+		i=0;
+		duree=0;
+		srand(time(NULL));
+		copieTab(NL,tabDCopie,tabD);
+		temps=fopen("./temps"strTRI".csv","w");
+		while(duree<TT*1000&&i<=maxi){
+			melangeTab(NL,tabDCopie);
+			printf("i : %d\n",i);
+			debut=clock();
+			fonTRI(i,tabDCopie);
+			fin=clock();
+			duree=1000*(fin-debut)/CLOCKS_PER_SEC;
+			fprintf(temps,"%d,%d\n",i,duree);
+			printf("duree(ms) : %d\n\n",duree);	
+			i=i+20000;
+		}
+		fclose(temps);
 	}
-	fclose(temps);
+
+	//recherche d'un élément du tableau
+	if (RECHERCHE){
+	}
+
 	return 0;
 }
+
 
 
 				
