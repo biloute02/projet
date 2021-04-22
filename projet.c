@@ -37,9 +37,9 @@ void copieTab(donnees tabDCopie[NL],donnees tabD[NL]){
 	for (i=0; i<NL; i++){
 		for (j=0; j<50; j++){  
 			tabDCopie[i].numero[j]=tabD[i].numero[j];
-			tabDCopie[i].rue[j]=tabD[i].numero[j];
-			tabDCopie[i].ville[j]=tabD[i].numero[j];
-			tabDCopie[i].code_postal[j]=tabD[i].numero[j];
+			tabDCopie[i].rue[j]=tabD[i].rue[j];
+			tabDCopie[i].ville[j]=tabD[i].ville[j];
+			tabDCopie[i].code_postal[j]=tabD[i].code_postal[j];
 		}
 	}
 	printf("Copié!\n");
