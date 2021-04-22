@@ -48,7 +48,7 @@ int main(){
 			fprintf(temps,"%d,%d\n",i+1,duree);
 		}
 	}
-	maxi=i
+	maxi=i;
 	fclose(france);
 	fclose(temps);
 
