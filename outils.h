@@ -1,5 +1,5 @@
 /*
- * Fonctions utiles pour le tri, la recherche, les temps de calcul.
+ * Fonctions utiles pour le tri, la recherche, le chargement d'un tableau.
  */
 #ifndef OUTILS_H
 #define OUTILS_H
@@ -16,29 +16,17 @@ char *strsep (char **stringp, const char *delim){
 	begin = *stringp;  
 	if (begin == NULL) return NULL;  
 	end = begin + strcspn (begin, delim);  
-	if (*end) {  *end++ = '\0';  *stringp = end;  }  
+	if (*end) {  *end++ = '\0';  *stringp = end; }  
 	else *stringp = NULL;  return begin; 
 }
 
 //affiche tout ou une partie du tableau 
-void afficheTab(int NL, donnees tabD[NL]){
-	int i;
-	printf("NUMBER,STREET,CITY,POSTCODE\n");
-	for (i=0; i<NL; i++){
+void afficheTab(int i, int NL, donnees tabD[NL]){
+	printf("\nNUMBER,STREET,CITY,POSTCODE\n");
+	for (i; i<NL; i++){
 		printf("%s,%s,%s,%s\n", tabD[i].numero, tabD[i].rue, tabD[i].ville, tabD[i].code_postal);
 	}
-}
-
-//comparer deux chaines de charactères de même longueur. Renvoie 1 si a>b ou 0 si a<=b
-char aSupb(int n, char a[n], char b[n]){
-	int i=0;
-	while (a[i]!='\0'||b[i]!='\0'){
-		if (a[i]>b[i]) return 1;
-		else if (a[i]<b[i]) return 0;
-		i++;
-	}
-	if (a[i]>b[i]) return 1;
-	else return 0; // cas où a égale b
+	putchar('\n');
 }
 
 //melanger un tableau
@@ -57,7 +45,7 @@ void melangeTab(int n, donnees tab[n]){
 	}
 }
 
-//permet de faire une copie du tableau pour le tri
+//permet de faire une copie d'un tableau dans un autre tableau de même longueur
 void copieTab(int NL, donnees tabDCopie[NL],donnees tabD[NL]){
 	if (MODE) printf("Copie tableau\n");
 	int i, j;
@@ -71,7 +59,7 @@ void copieTab(int NL, donnees tabDCopie[NL],donnees tabD[NL]){
 	}
 }
 
-//Affiche la taille maximale des objets de la structure
+//Affiche la taille maximale des objets de la structure dans un tableau
 void maxDonnees(int NL, donnees tab[NL]){
 	size_t maxNumero=0, maxRue=0, maxVille=0, maxCode_postal=0;
        	int i;

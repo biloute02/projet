@@ -5,7 +5,7 @@
 #define TRI_H
 #include"def.h"
 #include"outils.h"
-#define MODE 1 // 1:mode debugage
+#define MODE 1 // 1:mode débugage
 
 //tri rapide (pivot, partionnement, appels récursifs) p : première indice du tableau, n : taille du tableau
 void triRapideCode(int p, int r, int n, donnees tab[n]){
@@ -17,8 +17,8 @@ void triRapideCode(int p, int r, int n, donnees tab[n]){
 	donnees pivot, temp;
 	pivot=tab[r];	
 	//partionnement
-	for (i; i<r;i++){
-		if (!aSupb(len,tab[i].code_postal,pivot.code_postal)){
+	for (i; i<r; i++){
+		if (strcmp(tab[i].code_postal,pivot.code_postal)<=0){
 			temp=tab[i];
 			tab[i]=tab[j];	
 			tab[j]=temp;
@@ -59,13 +59,13 @@ void triFusionCode(int p, int r, int n, donnees tab[n]){
 	for (i=p, j=0; i<=q; i++, j++){
 		tab1[j]=tab[i];
 	}
-	tab1[j]=(struct donnees){{0},{0},{0},{"9999\0"}};//problème si numero, ville ou rue nulles
+	tab1[j]=(struct donnees){{0},{0},{0},{"99999\0"}};//problème si numero, ville ou rue nulles
 	for (j=0; i<=r; i++, j++){
 		tab2[j]=tab[i];
 	}	
-	tab2[j]=(struct donnees){{0},{0},{0},{"9999\0"}};
+	tab2[j]=(struct donnees){{0},{0},{0},{"99999\0"}};
 	for (i=p;i<=r;i++){
-		if (aSupb(len,tab1[k1].code_postal,tab2[k2].code_postal)){
+		if (strcmp(tab1[k1].code_postal,tab2[k2].code_postal)>0){
 			tab[i]=tab2[k2];
 			k2++;
 		}
@@ -80,11 +80,11 @@ void triFusionCode(int p, int r, int n, donnees tab[n]){
 
 //tri fusion
 void triFusion(int n, donnees tab[n]){
-	//afficheTab(n, tab);
+	//afficheTab(0, n, tab);
 	if (MODE) printf("Tri fusion\n");
 	int p=0;
 	triFusionCode(p, n-1, n, tab);
-	//afficheTab(n, tab);
+	//afficheTab(0, n, tab);
 }
 
 
@@ -97,7 +97,7 @@ void triInsertion(int n, donnees tab[n]){
 	for (i=1;i<n;i++){
 		val=tab[i];
 		j=i;
-		while (j>0&&aSupb(len,tab[j-1].code_postal,val.code_postal)){
+		while (j>0&&strcmp(tab[j-1].code_postal,val.code_postal)>0){
 			tab[j]=tab[j-1];
 			j--;
 		}
@@ -114,7 +114,7 @@ void triSelection(int n, donnees tab[n]){
 	for (i=0;i<n-1;i++){
 		val=tab[i];
 		for (j=i+1;j<n;j++){
-			if (aSupb(len,tab[j].code_postal,val.code_postal)) val=tab[j];
+			if (strcmp(tab[j].code_postal,val.code_postal)>0) val=tab[j];
 		}
 		tab[j-1]=tab[i];	
 		tab[i]=val;
