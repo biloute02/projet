@@ -122,3 +122,38 @@ void triSelection(int n, donnees tab[n]){
 }
 
 #endif
+
+
+//Inverse toutes les valeurs entre i et j
+void InverseTab(donnees tableau[], int i, int j) {
+	int h; 
+	donnees passage;
+	for(h=i; h<=(i+j)/2; h++) {
+		passage=tableau[h];
+		tableau[h]=tableau[j-(h-i)];
+		tableau[j-(h-i)]=passage;
+	}
+}
+
+//Max parmi ceux d'indices inférieurs ou égal à 'a'
+int LeMax(donnees tableau[], int a) { 
+	int k, max;
+	for(k=1; k<=a; k++) {
+		if(tableau[k].code_postal > tableau[max].code_postal) {
+			max=k;
+		}
+	}
+	return max;
+}
+
+//Tri crêpes
+void triBreton(int l, donnees tableau[]) { 
+	int c, d;	
+	for(c=l; c>=1; c--) {
+		d=LeMax(tableau, c);
+		if(d!=c) {
+			InverseTab(tableau, 1, d);
+			InverseTab(tableau, 1, c);
+		}
+	}
+}
