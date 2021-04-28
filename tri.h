@@ -7,7 +7,7 @@
 #include"outils.h"
 #define MODE 1 // 1:mode débugage
 
-//tri rapide (pivot, partionnement, appels récursifs) p : première indice du tableau, n : taille du tableau
+//Tri rapide (pivot, partionnement, appels récursifs) p : première indice du tableau, n : taille du tableau
 void triRapideCode(int p, int r, int n, donnees tab[n]){
 	if (r-p+1<2) return;
 	int i, j, len;
@@ -33,14 +33,14 @@ void triRapideCode(int p, int r, int n, donnees tab[n]){
 	triRapideCode(j+1, r, n, tab);
 }
 
-//tri rapide
+//Tri rapide
 void triRapide(int n, donnees tab[n]){
 	if (MODE) printf("Tri rapide\n");
 	int p=0;
 	triRapideCode(p, n-1, n, tab);	
 }
 
-//tri fusion
+//Tri fusion
 void triFusionCode(int p, int r, int n, donnees tab[n]){
 	//Séparation du tableau en deux parties
 	if (r-p+1<2) return;
@@ -78,7 +78,7 @@ void triFusionCode(int p, int r, int n, donnees tab[n]){
 	free(tab2);
 }
 
-//tri fusion
+//Tri fusion
 void triFusion(int n, donnees tab[n]){
 	//afficheTab(0, n, tab);
 	if (MODE) printf("Tri fusion\n");
@@ -88,7 +88,7 @@ void triFusion(int n, donnees tab[n]){
 }
 
 
-//tri par insertion d'un tableau de données
+//Tri par insertion d'un tableau de données
 void triInsertion(int n, donnees tab[n]){
 	if (MODE) printf("Tri insertion\n");
 	int i, j, len;
@@ -105,7 +105,7 @@ void triInsertion(int n, donnees tab[n]){
 	}
 }
 
-//tri par sélection 
+//Tri par sélection 
 void triSelection(int n, donnees tab[n]){
 	if (MODE) printf("Tri selection\n");
 	int i, j, len;
@@ -121,4 +121,38 @@ void triSelection(int n, donnees tab[n]){
 	}
 }
 
+//Inverse toutes les valeurs entre i et j
+void InverseTab( int i, int j, donnees tableau[j+1]) {
+    int h;
+    donnees passage;
+    for(h=i; h<=(i+j)/2; h++) {
+        passage=tableau[h];
+        tableau[h]=tableau[j-(h-i)];
+        tableau[j-(h-i)]=passage;
+    }
+}
+
+//Max parmi ceux d'indices inférieurs ou égal à 'i'
+int LeMax(int i, donnees tableau[i]) {
+    int k, max=0;
+    for(k=0; k<i; k++) {
+        if (strcmp(tableau[k].code_postal, tableau[max].code_postal)>0) {
+            max=k;
+        }
+    }
+    return max;
+}
+
+//Tri crêpes
+void triBreton(int i, donnees tableau[i]) {
+    if (MODE) printf("Tri Breton\n");
+    int c, d;
+    for(c=i; c>=1; c--) {
+        d=LeMax(c, tableau);
+        if(d!=c) {
+            InverseTab( 0, d, tableau);
+            InverseTab( 0, c-1, tableau);
+        }
+    }
+}
 #endif

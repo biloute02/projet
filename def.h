@@ -1,3 +1,7 @@
+/*
+ * Définition dans une structure des types et de leurs tailles 
+ * qui permettent d'enregister les données du tableau
+ */
 #ifndef DEF_H
 #define DEF_H
 
