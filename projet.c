@@ -8,12 +8,12 @@
 #include"recherche.h" //Fonctions de recherche d'éléments 
 #include"outils.h" //Fonctions non-classés
 #define MAXNL 27381995 // Nombre de lignes total moins un dans france.csv
-#define NL 10000 // Nombre de lignes du fichier france.csv à charger pour les tests de tri et de recherche (>MAXNL pour lire tout le fichier)
+#define NL 200000 // Nombre de lignes du fichier france.csv à charger pour les tests de tri et de recherche (>MAXNL pour lire tout le fichier)
 
 #define TRI 1 // 1 : étudier une fonction de trie, 0 : sinon <---
-#define fonTRI triBreton //Indiquer la fonction de tri pour étudier sa complexité (triSelection,triInsertion,triRapide,triFusion,triBreton) <---
-#define TT 30 //Temps en seconde maximal pour le tri d'un tableau <---
-#define PAS 1000 //Pas d'incrémentation pour le tri à étudier en fonction de la taille du tableau. Par défaut 20000. 
+#define fonTRI triFusion //Indiquer la fonction de tri pour étudier sa complexité (triSelection,triInsertion,triRapide,triFusion,triBreton) <---
+#define TT 60 //Temps en seconde maximal pour le tri d'un tableau <---
+#define PAS 5000 //Pas d'incrémentation pour le tri à étudier en fonction de la taille du tableau. Par défaut 20000. 
 #define STR_VALUE(arg) #arg 
 #define TO_STR(name) STR_VALUE(name) 
 #define strTRI TO_STR(fonTRI)
@@ -30,7 +30,7 @@ int main(){
 	int ch; //Entrée (y/n)
 	FILE* france; //Fichier à lire
 	FILE* temps; //Fichier des temps de calcul
-	clock_t debut, fin; int duree; //Mesure des temps de calcul
+	clock_t debut, fin; long double duree; //Mesure des temps de calcul
 
 	printf("Etude de tri : %d\n Algorithme de tri : "strTRI"\n", TRI);
 	printf(" Nombre de lignes à trier : %d\n", NL);
@@ -65,8 +65,9 @@ int main(){
 		free(adr);	
 		if ((i+1)%100000==0){
 			fin=clock();
-			duree=1000*(fin-debut)/CLOCKS_PER_SEC;
-			fprintf(temps,"%d,%d\n",i+1,duree);
+			duree=fin-debut;
+			duree=duree/CLOCKS_PER_SEC;
+			fprintf(temps,"%d,%Lf\n",i+1,duree);
 		}
 	}
 	maxNL=i; //Nombre d'élément dans le tableau
@@ -79,15 +80,16 @@ int main(){
 		duree=0;
 		srand(time(NULL));
 		temps=fopen("temps"strTRI".csv","w");
-		while(duree<TT*1000&&i<=maxNL){
+		while(duree<TT&&i<=maxNL){
 			melangeTab(maxNL,tab);
 			printf("NL : %d\n",i);
 			debut=clock();
 			fonTRI(i,tab);
 			fin=clock();
-			duree=1000*(fin-debut)/CLOCKS_PER_SEC;
-			fprintf(temps,"%d,%d\n",i,duree);
-			printf("Duree(ms) : %d\n\n",duree);	
+			duree=fin-debut;
+			duree=duree/CLOCKS_PER_SEC;
+			fprintf(temps,"%d,%Lf\n",i,duree);
+			printf("Duree(s) : %Lf\n\n",duree);	
 			i=i+PAS;
 		}
 		fclose(temps);
@@ -99,7 +101,7 @@ int main(){
 		int compt;
 		char codePostal[6]={0};
 		temps=fopen("temps"strRECHERCHE".csv","w");
-		fprintf(temps,"Code postal, Nombre d'éléments, Nombre de lignes chargées, Temps(affichage compris)\n");
+		fprintf(temps,"Code postal, Nombre d'éléments, Nombre de lignes chargées, Temps(affichage compris) en secondes\n");
 		do {
 			printf("\nEntre un code postal -00000- à rechercher\n");
 			do {	
@@ -108,11 +110,12 @@ int main(){
 			debut=clock();
 			compt=fonRECHERCHE(codePostal,maxNL,tab);
 			fin=clock();
-			duree=1000*(fin-debut)/CLOCKS_PER_SEC;
-			fprintf(temps,"%s,%d,%d,%d\n",codePostal,compt,maxNL,duree);
+			duree=(fin-debut);
+     			duree=duree/CLOCKS_PER_SEC;
+			fprintf(temps,"%s,%d,%d,%Lf\n",codePostal,compt,maxNL,duree);
 			printf("Code postal recherché : %s\n", codePostal);
 			printf("Nombre d'éléments trouvés : %d\n", compt);
-			printf("Duree(ms) : %d\n\n", duree);
+			printf("Duree(s) : %Lf\n\n", duree);
 			printf("Voulez-vous rechercher une autre adresse ?(y/n)\n");
 			while ((ch=getchar())!='\n'&&ch!=EOF);
 			ch=getchar();
